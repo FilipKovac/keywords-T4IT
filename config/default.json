@@ -1,13 +1,17 @@
 {
-  "host": "localhost",
-  "port": 3030,
-  "public": "./public/",
-  "origins": [
-    "http://localhost:3030"
-  ],
-  "paginate": {
-    "default": 10,
-    "max": 50
-  },
-  "mongodb": "dbconnectionToBeDone"
+    "host": "localhost",
+    "port": 3030,
+    "public": "./public/",
+    "origins": ["http://localhost:3030"],
+    "paginate": {
+        "default": 10,
+        "max": 50
+    },
+    "mongodb": "mongodb://localhost:27017/data",
+    "elasticsearch": {
+        "host": "localhost:9200",
+        "apiVersion": "7.x",
+        "log": "error"
+    },
+    "keyword-attributes": ["name", "description", "tags"]
 }

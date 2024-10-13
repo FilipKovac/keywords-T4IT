@@ -1,0 +1,48 @@
+version: '3.9'
+services:
+    mongo:
+        image: mongo
+        container_name: keywords-mongo
+        restart: always
+        environment:
+            MONGO_INITDB_DATABASE: data
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: example
+        ports:
+            - 27017:27017
+            
+    elastic:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+        container_name: keywords-elastic
+        restart: always
+        ports:
+            - 9200:9200
+            - 9300:9300
+        environment:
+            discovery.type: single-node
+
+    mongo-express:
+        image: mongo-express
+        container_name: keywords-mongo-express
+        restart: always
+        ports:
+            - 8081:8081
+        depends_on:
+            - mongo
+        environment:
+            ME_CONFIG_MONGODB_SERVER: keywords-mongo
+            ME_CONFIG_MONGODB_ADMINUSERNAME: root
+            ME_CONFIG_MONGODB_ADMINPASSWORD: example
+            ME_CONFIG_OPTIONS_EDITORTHEME: ambiance
+
+    keywords:
+        build: .
+        container_name: keywords
+        restart: always
+        ports:
+            - 3030:3030
+        depends_on:
+            - mongo-express
+            - elastic
+        volumes:
+            - .:/usr/app

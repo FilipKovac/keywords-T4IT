@@ -13,7 +13,7 @@ export const configurationSchema = Type.Intersect([
         host: Type.String(),
         port: Type.Number(),
         public: Type.String(),
-        'keyword-attributes': Type.Array(Type.String()),
+        'keyword-attributes': Type.String({ pattern: '^[^\\s]+$' }),
     }),
 ]);
 

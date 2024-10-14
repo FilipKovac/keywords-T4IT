@@ -7,11 +7,11 @@
         "default": 10,
         "max": 50
     },
-    "mongodb": "mongodb://localhost:27017/data",
+    "mongodb": "mongodb://root:pass@mongo:27017/data?authSource=admin",
     "elasticsearch": {
         "host": "localhost:9200",
         "apiVersion": "7.x",
         "log": "error"
     },
-    "keyword-attributes": ["name", "description", "tags"]
+    "keyword-attributes": "firstName,middleName,lastName,hobbies"
 }

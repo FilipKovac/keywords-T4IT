@@ -10,11 +10,6 @@
         "declaration": true,
         "strict": true,
         "esModuleInterop": true,
-        "paths": {
-            "@app/models/*": ["./src/models/*"],
-            "@app/hooks/*": ["./src/hooks/*"],
-            "@app/logger": ["./src/logger.ts"],
-        },
         "sourceMap": true
     },
     "include": ["src"],

@@ -2,6 +2,8 @@ version: '3.9'
 services:
     mongo:
         image: mongo
+        networks:
+            - keywords-net
         container_name: keywords-mongo
         restart: always
         environment:
@@ -10,7 +12,7 @@ services:
             MONGO_INITDB_ROOT_PASSWORD: pass
         ports:
             - 27017:27017
-            
+
     # elastic:
     #     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
     #     container_name: keywords-elastic
@@ -23,6 +25,8 @@ services:
 
     mongo-express:
         image: mongo-express
+        networks:
+            - keywords-net
         container_name: keywords-mongo-express
         restart: always
         ports:
@@ -37,6 +41,8 @@ services:
 
     keywords:
         build: .
+        networks:
+            - keywords-net
         container_name: keywords
         restart: always
         ports:
@@ -51,3 +57,6 @@ services:
         environment:
             KEYWORD_ATTRIBUTES: 'firstName,hobbies'
 
+networks:
+    keywords-net:
+        external: true

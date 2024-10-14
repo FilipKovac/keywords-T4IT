@@ -3,6 +3,7 @@ import { MongooseServiceOptions, Service } from 'feathers-mongoose';
 import { userKeywordsUpdate } from '../../hooks/user-keywords-update';
 import { logger } from '../../logger';
 import { UserModel } from '../../models/user.model';
+import { normalizeString } from '../../utils';
 
 export const users = (app: Application) => {
     const options: Partial<MongooseServiceOptions> = {
@@ -10,12 +11,7 @@ export const users = (app: Application) => {
         paginate: app.get('paginate'),
         lean: true,
         multi: false,
-        whitelist: [
-            '$text',
-            '$search',
-            '$caseSensitive',
-            '$diacriticSensitive',
-        ],
+        whitelist: ['$text', '$search'],
     };
 
     // Initialize our service with any options it requires
@@ -30,9 +26,7 @@ export const users = (app: Application) => {
                 (context) => {
                     if (context.params.query?.q) {
                         context.params.query.$text = {
-                            $search: context.params.query.q,
-                            $caseSensitive: false,
-                            $diacriticSensitive: false,
+                            $search: normalizeString(context.params.query.q),
                         };
                         delete context.params.query.q;
                     }
@@ -61,7 +55,7 @@ class UserService extends Service {
     }
 
     private generateKeywords(model: any, attributes: Array<string>): string {
-        return attributes
+        const keywords = attributes
             .reduce((acc, attribute) => {
                 if (
                     model[attribute] !== null &&
@@ -72,5 +66,7 @@ class UserService extends Service {
                 return acc;
             }, [] as Array<string>)
             .join(', ');
+
+        return normalizeString(keywords);
     }
 }

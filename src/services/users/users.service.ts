@@ -1,13 +1,21 @@
 import { Application, Id } from '@feathersjs/feathers';
-import { Service } from 'feathers-mongoose';
+import { MongooseServiceOptions, Service } from 'feathers-mongoose';
 import { userKeywordsUpdate } from '../../hooks/user-keywords-update';
 import { logger } from '../../logger';
 import { UserModel } from '../../models/user.model';
 
 export const users = (app: Application) => {
-    const options = {
+    const options: Partial<MongooseServiceOptions> = {
         Model: UserModel,
         paginate: app.get('paginate'),
+        lean: true,
+        multi: false,
+        whitelist: [
+            '$text',
+            '$search',
+            '$caseSensitive',
+            '$diacriticSensitive',
+        ],
     };
 
     // Initialize our service with any options it requires
@@ -17,6 +25,20 @@ export const users = (app: Application) => {
     const service = app.service('users');
 
     service.hooks({
+        before: {
+            find: [
+                (context) => {
+                    if (context.params.query?.q) {
+                        context.params.query.$text = {
+                            $search: context.params.query.q,
+                            $caseSensitive: false,
+                            $diacriticSensitive: false,
+                        };
+                        delete context.params.query.q;
+                    }
+                },
+            ],
+        },
         after: {
             create: [userKeywordsUpdate],
             update: [userKeywordsUpdate],

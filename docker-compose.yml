@@ -43,10 +43,11 @@ services:
             - 3030:3030
         depends_on:
             - mongo-express
-            # - elastic
+            - elastic
         volumes:
             - .:/usr/app
         command: npm run dev
+        # command: npm run start
         environment:
             KEYWORD_ATTRIBUTES: 'firstName,hobbies'
 

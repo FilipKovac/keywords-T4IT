@@ -9,7 +9,7 @@
     },
     "mongodb": "mongodb://root:pass@mongo:27017/data?authSource=admin",
     "elasticsearch": {
-        "host": "localhost:9200",
+        "host": "elastic:9200",
         "apiVersion": "7.x",
         "log": "error"
     },

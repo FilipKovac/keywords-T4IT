@@ -11,14 +11,5 @@ export const userKeywordsUpdate = async (context: HookContext) => {
 
     logger.info('Updating keywords', { result, attributes });
 
-    if (!Array.isArray(result)) {
-        await service.updateKeywords(result._id, attributes);
-        return context;
-    }
-
-    await Promise.allSettled(
-        result.map(async (user) => {
-            await service.updateKeywords(user._id, attributes);
-        }),
-    );
+    await service.updateKeywords(result._id, attributes);
 };

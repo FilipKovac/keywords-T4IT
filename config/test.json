@@ -1,3 +1,4 @@
 {
-  "port": 8998
+    "port": 8998,
+    "mongodb": "mongodb://root:pass@mongo-test:27017/data?authSource=admin"
 }

@@ -1,0 +1,35 @@
+services:
+    mongo-test:
+        image: mongo
+        container_name: keywords-mongo-test
+        environment:
+            MONGO_INITDB_DATABASE: data
+            MONGO_INITDB_ROOT_USERNAME: root
+            MONGO_INITDB_ROOT_PASSWORD: pass
+        ports:
+            - 27017:27017
+
+    # elastic:
+    #     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+    #     container_name: keywords-elastic
+    #     restart: always
+    #     ports:
+    #         - 9200:9200
+    #         - 9300:9300
+    #     environment:
+    #         discovery.type: single-node
+
+    keywords-test:
+        build:
+            context: .
+            dockerfile: Dockerfile.test
+        container_name: keywords-test
+        ports:
+            - 8998:8998
+        depends_on:
+            - mongo-test
+        volumes:
+            - .:/usr/app
+        command: npm run test
+        environment:
+            KEYWORD_ATTRIBUTES: firstName,lastName,hobbies

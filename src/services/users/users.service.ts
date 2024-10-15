@@ -1,9 +1,14 @@
 import { Application, Id } from '@feathersjs/feathers';
 import { MongooseServiceOptions, Service } from 'feathers-mongoose';
 import { userKeywordsUpdate } from '../../hooks/user-keywords-update';
-import { logger } from '../../logger';
 import { UserModel } from '../../models/user.model';
 import { normalizeString } from '../../utils';
+
+declare module '../../declarations' {
+    interface ServiceTypes {
+        users: UserService;
+    }
+}
 
 export const users = (app: Application) => {
     const options: Partial<MongooseServiceOptions> = {
@@ -48,8 +53,6 @@ class UserService extends Service {
     ): Promise<void> {
         const user = await UserModel.findById(_id);
         const keywords = this.generateKeywords(user, attributes);
-
-        logger.info('Updating keywords', { _id, keywords, attributes });
 
         await UserModel.updateOne({ _id }, { keywords });
     }

@@ -1,3 +1,4 @@
+#!/bin/bash
 
 docker network create keywords-net 2>/dev/null
 
